@@ -31,14 +31,19 @@ jobs:
         chmod +x build.sh  # Make sure build.sh is executable
         ./build.sh  # Run the build script that uses pyinstaller to create the executable
 
+    - name: List files in dist/
+      run: |
+          ls -al dist/
+  
+
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: linux-executable  # Name of the artifact (will be shown in the Actions tab)
+        name: linux-executable
         path: |
-          dist/tkforge-cli  # If the 'cli' argument was passed
-          dist/TkForge      # If no argument (or different argument) was passed
-
+            dist/tkforge-cli
+            dist/TkForge
+  
     - name: Print download link
       run: |
         echo "Download your app from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
