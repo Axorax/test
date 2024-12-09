@@ -1,4 +1,4 @@
-name: Build Python App for Linux
+name: Build Python App for Fedora Linux
 
 on:
   push:
@@ -7,23 +7,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest  # Default runner to start the job
+    container:  # Use a Fedora container
+      image: fedora:latest  # Latest Fedora image
 
     steps:
+    - name: Update Fedora and install Python
+      run: |
+        dnf update -y
+        dnf install -y python3 python3-pip git pyinstaller
+
     - name: Checkout code
       uses: actions/checkout@v3
 
     - name: List files in the repository  # Debugging step to list the files
       run: ls -al  # This will print the file structure
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'  # Use the version of Python you need
-
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install -r requirements.txt  # Install dependencies from requirements.txt
 
     - name: Run build.sh
@@ -33,17 +35,16 @@ jobs:
 
     - name: List files in dist/
       run: |
-          ls -al dist/
-  
+        ls -al dist/  # Confirm the dist directory contains the built executables
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: linux-executable
+        name: fedora-linux-executable
         path: |
-            dist/tkforge-cli
-            dist/TkForge
-  
+          dist/tkforge-cli
+          dist/TkForge
+
     - name: Print download link
       run: |
         echo "Download your app from: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
