@@ -15,7 +15,11 @@ jobs:
     - name: Update Fedora and install Python
       run: |
         dnf update -y
-        dnf install -y python3 python3-pip git
+        dnf install -y python3 python3-pip git binutils  # Install Python and binutils for objdump
+
+    - name: Verify objdump installation
+      run: |
+        objdump --version  # Confirm that objdump is available
 
     - name: Checkout code
       uses: actions/checkout@v3
