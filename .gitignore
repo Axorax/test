@@ -13,4 +13,5 @@ chocolatey-package/
 *.txt
 !VERSION.txt
 *.spec
+!requirements.txt
 main.py
